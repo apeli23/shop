@@ -1,4 +1,4 @@
-# Nextjs Tailwind ECommerce Website Like Amazon
+# Nextjs Tailwind ECommerce Website
 
 decription
 
