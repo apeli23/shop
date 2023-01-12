@@ -12,15 +12,14 @@ export default function Layout({ title, children }) {
       </Head>
 
       <div className="flex min-h-screen flex-col justify-between">
-        <header style={{ border: '2px solid blue' }}>
+        <header>
           <nav
-            style={{ border: '2px solid red' }}
             className="flex h-12 items-center px-4 justify-between shadow-md"
           >
             <Link href="/" legacyBehavior>
               <a className="text-lg font-bold">Acme-Shop</a>
             </Link>
-            <div style={{ border: '2px solid green' }}>
+            <div>
               <Link href="/cart" legacyBehavior>
                 <a className="p-2">Cart</a>
               </Link>
