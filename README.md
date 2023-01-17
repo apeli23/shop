@@ -32,13 +32,14 @@ decription
    4. add reducer
    5. create store provider
    6. handle add to cart button
-
 9. Create Cart Page
    1. create cart.js
    2. use context to get cart items
    3. list items in cart items
    4. redirect to cart screen after add to cart
-
 10. Update Quanity In The Cart
     1. add select box for quantity
     2. handle select box change
+11. Save Cart Items
+    1. install js-cookie package
+    2. save and retreive cart items in cookies
