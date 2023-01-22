@@ -97,3 +97,7 @@ decription
     1. create profile screen
     2. show user info
     3. handle update user info
+26. Create Admin Dashboard
+    1. Create Admin Menu
+    2. create dashboard screen
+    3. Implement admin summary api
