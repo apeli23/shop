@@ -1,12 +1,13 @@
-import axios from 'axios';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useReducer } from 'react';
+import { toast } from 'react-toastify';
 import Layout from '../../components/Layout';
 import { getError } from '../../utils/error';
-import { toast } from 'react-toastify';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -25,24 +26,47 @@ function reducer(state, action) {
     case 'PAY_RESET':
       return { ...state, loadingPay: false, successPay: false, errorPay: '' };
 
+    case 'DELIVER_REQUEST':
+      return { ...state, loadingDeliver: true };
+    case 'DELIVER_SUCCESS':
+      return { ...state, loadingDeliver: false, successDeliver: true };
+    case 'DELIVER_FAIL':
+      return { ...state, loadingDeliver: false };
+    case 'DELIVER_RESET':
+      return {
+        ...state,
+        loadingDeliver: false,
+        successDeliver: false,
+      };
+
     default:
       state;
   }
 }
 function OrderScreen() {
+  const { data: session } = useSession();
   // order/:id
-
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
   const { query } = useRouter();
   const orderId = query.id;
 
-  const [{ loading, error, order, successPay, loadingPay }, dispatch] =
-    useReducer(reducer, {
-      loading: true,
-      order: {},
-      error: '',
-    });
+  const [
+    {
+      loading,
+      error,
+      order,
+      successPay,
+      loadingPay,
+      loadingDeliver,
+      successDeliver,
+    },
+    dispatch,
+  ] = useReducer(reducer, {
+    loading: true,
+    order: {},
+    error: '',
+  });
   useEffect(() => {
     const fetchOrder = async () => {
       try {
@@ -53,10 +77,18 @@ function OrderScreen() {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
       }
     };
-    if (!order._id || successPay || (order._id && order._id !== orderId)) {
+    if (
+      !order._id ||
+      successPay ||
+      successDeliver ||
+      (order._id && order._id !== orderId)
+    ) {
       fetchOrder();
       if (successPay) {
         dispatch({ type: 'PAY_RESET' });
+      }
+      if (successDeliver) {
+        dispatch({ type: 'DELIVER_RESET' });
       }
     } else {
       const loadPaypalScript = async () => {
@@ -72,7 +104,7 @@ function OrderScreen() {
       };
       loadPaypalScript();
     }
-  }, [order, orderId, paypalDispatch, successPay]);
+  }, [order, orderId, paypalDispatch, successDeliver, successPay]);
   const {
     shippingAddress,
     paymentMethod,
@@ -119,6 +151,21 @@ function OrderScreen() {
   }
   function onError(err) {
     toast.error(getError(err));
+  }
+
+  async function deliverOrderHandler() {
+    try {
+      dispatch({ type: 'DELIVER_REQUEST' });
+      const { data } = await axios.put(
+        `/api/admin/orders/${order._id}/deliver`,
+        {}
+      );
+      dispatch({ type: 'DELIVER_SUCCESS', payload: data });
+      toast.success('Order is delivered');
+    } catch (err) {
+      dispatch({ type: 'DELIVER_FAIL', payload: getError(err) });
+      toast.error(getError(err));
+    }
   }
 
   return (
@@ -184,9 +231,9 @@ function OrderScreen() {
                         </Link>
                       </td>
                       <td className=" p-5 text-right">{item.quantity}</td>
-                      <td className="p-5 text-right">ksh{item.price}</td>
+                      <td className="p-5 text-right">${item.price}</td>
                       <td className="p-5 text-right">
-                        ksh{item.quantity * item.price}
+                        ${item.quantity * item.price}
                       </td>
                     </tr>
                   ))}
@@ -201,25 +248,25 @@ function OrderScreen() {
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Items</div>
-                    <div>ksh{itemsPrice}</div>
+                    <div>${itemsPrice}</div>
                   </div>
                 </li>{' '}
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Tax</div>
-                    <div>ksh{taxPrice}</div>
+                    <div>${taxPrice}</div>
                   </div>
                 </li>
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Shipping</div>
-                    <div>ksh{shippingPrice}</div>
+                    <div>${shippingPrice}</div>
                   </div>
                 </li>
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Total</div>
-                    <div>ksh{totalPrice}</div>
+                    <div>${totalPrice}</div>
                   </div>
                 </li>
                 {!isPaid && (
@@ -236,6 +283,17 @@ function OrderScreen() {
                       </div>
                     )}
                     {loadingPay && <div>Loading...</div>}
+                  </li>
+                )}
+                {session.user.isAdmin && order.isPaid && !order.isDelivered && (
+                  <li>
+                    {loadingDeliver && <div>Loading...</div>}
+                    <button
+                      className="primary-button w-full"
+                      onClick={deliverOrderHandler}
+                    >
+                      Deliver Order
+                    </button>
                   </li>
                 )}
               </ul>
