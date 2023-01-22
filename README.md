@@ -89,3 +89,11 @@ decription
     2. handle payment
     3. create backend api
     4. update order state
+24. Create Order History Screen
+    1. create my order api
+    2. create order history component
+    3. fetch orders and display them
+25. Update User Profile
+    1. create profile screen
+    2. show user info
+    3. handle update user info
