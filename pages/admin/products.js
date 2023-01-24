@@ -42,10 +42,14 @@ export default function AdminProdcutsScreen() {
         <div>
           <ul>
             <li>
-              <Link href="/admin/dashboard" legacyBehavior>Dashboard</Link>
+              <Link href="/admin/dashboard" legacyBehavior>
+                Dashboard
+              </Link>
             </li>
             <li>
-              <Link href="/admin/orders" legacyBehavior>Orders</Link>
+              <Link href="/admin/orders" legacyBehavior>
+                Orders
+              </Link>
             </li>
             <li>
               <Link href="/admin/products" legacyBehavior>
@@ -53,7 +57,9 @@ export default function AdminProdcutsScreen() {
               </Link>
             </li>
             <li>
-              <Link href="/admin/users" legacyBehavior>Users</Link>
+              <Link href="/admin/users" legacyBehavior>
+                Users
+              </Link>
             </li>
           </ul>
         </div>
@@ -87,7 +93,11 @@ export default function AdminProdcutsScreen() {
                       <td className=" p-5 ">{product.countInStock}</td>
                       <td className=" p-5 ">{product.rating}</td>
                       <td className=" p-5 ">
-                        <Link href={`/admin/product/${product._id}`} legacyBehavior>Edit</Link>
+                        <Link href={`/admin/product/${product._id}`} legacyBehavior>
+                          <a type="button" className="default-button">
+                            Edit
+                          </a>
+                        </Link>
                         &nbsp;
                         <button>Delete</button>
                       </td>
