@@ -10,6 +10,6 @@ export default function signature(req, res) {
   );
  
   res.statusCode = 200;
-  console.log(res.json({ signature, timestamp }))
+  console.log(res.json())
   res.json({ signature, timestamp });
 }
