@@ -122,8 +122,16 @@ decription
         2. get cloudinary keys
         3. create upload api
         4. upload files in edit page
-33. Create And Delete Products
+32. Create And Delete Products
         1. add create product button
         2. build new product api
         3. add handler for delete
         4. implement delete api
+33. List Users For Admin
+        1. create users page
+        2. create users api
+        3. use api in page
+34. Add Carousel
+        1. create featured products
+        2. feed carousel data
+        3. show popular products
