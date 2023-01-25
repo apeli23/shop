@@ -1,17 +1,21 @@
-import Layout from '../components/Layout';
-import ProductItem from '../components/ProductItem';
 import axios from 'axios';
 import { useContext } from 'react';
 import { toast } from 'react-toastify';
+import Layout from '../components/Layout';
+import ProductItem from '../components/ProductItem';
 import Product from '../models/Product';
 import db from '../utils/db';
 import { Store } from '../utils/Store';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import Link from 'next/link';
 
-export default function Home({products}) {
-  const {state,dispatch} = useContext(Store);
-  const {cart} = state;
+export default function Home({ products, featuredProducts }) {
+  console.log(featuredProducts)
+  const { state, dispatch } = useContext(Store);
+  const { cart } = state;
 
-  const addToCartHandler = async(product ) => {
+  const addToCartHandler = async (product) => {
     const existItem = cart.cartItems.find((x) => x.slug === product.slug);
     const quantity = existItem ? existItem.quantity + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`);
@@ -26,6 +30,18 @@ export default function Home({products}) {
 
   return (
     <Layout title="Home Page">
+      <Carousel showThumbs={false} autoPlay>
+        {featuredProducts.map((product) => (
+          <div key={product._id} >
+            <Link href={`/product/${product.slug}`} legacyBehavior>
+              <a className="flex">
+                <img height="100px"src={product.banner} alt={product.name} />
+              </a>
+            </Link>
+          </div>
+        ))}
+      </Carousel>
+      <h2 className="h2 my-4">Latest Products</h2>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-3">
         {products.map((product) => (
           <ProductItem
@@ -39,12 +55,14 @@ export default function Home({products}) {
   );
 }
 
-export async function getServerSideProps(){
+export async function getServerSideProps() {
   await db.connect();
-  const products = await Product.find().lean()
+  const products = await Product.find().lean();
+  const featuredProducts = await Product.find({ isFeatured: true }).lean();
   return {
     props: {
+      featuredProducts: featuredProducts.map(db.convertDocToObj),
       products: products.map(db.convertDocToObj),
-    }
-  }
+    },
+  };
 }

@@ -27,6 +27,8 @@ const data = {
       numReviews: 13,
       countInStock: 20,
       description: 'TP-Link TL-WR840N 300Mbps Wireless N Router',
+      isFeatured: true,
+      banner: '/images/banner1.jpg',
     },
     {
       name: 'Air Wick',
@@ -39,6 +41,8 @@ const data = {
       numReviews: 14,
       countInStock: 20,
       description: 'Air Wick 2-Piece Freshmatic Start Kit 250ml',
+      isFeatured: true,
+      banner: '/images/banner2.jpg',
     },
 
     {
@@ -52,6 +56,8 @@ const data = {
       numReviews: 8,
       countInStock: 20,
       description: 'Samsung 43 Inches 4K UHD LED Smart TV Black',
+      isFeatured: true,
+      banner: '/images/banner3.jpg',
     },
     {
       name: 'Monitor',
@@ -64,6 +70,7 @@ const data = {
       numReviews: 10,
       countInStock: 20,
       description: "'32'' Class Full HD IPS LED Monitor (31.5'' Diagonal)'",
+      isFeatured: false,
     },
     {
       name: 'Xbox Wireless Controller',
@@ -77,8 +84,8 @@ const data = {
       countInStock: 20,
       description:
         'Textured triggers and bumpers I Hybrid D-pad I Button mapping I Bluetooth® technology',
+      isFeatured: false,
     },
-
     {
       name: 'Dell Laptop',
       slug: 'dell-laptop',
@@ -90,6 +97,7 @@ const data = {
       numReviews: 7,
       countInStock: 20,
       description: 'Laptop Dell Latitude E7240 4GB Intel Core I5 SSD 128GB',
+      isFeatured: false,
     },
   ],
 };

@@ -43,7 +43,7 @@ export default function Layout({ title, children }) {
                 <a className="p-2">
                   Cart
                   {cartItemsCount > 0 && (
-                    <span className="ml-1 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white">
+                    <span className="ml-1 rounded-full bg-red-600 px-2 41 text-xs font-bold text-white">
                       {cartItemsCount}
                     </span>
                   )}
@@ -96,7 +96,9 @@ export default function Layout({ title, children }) {
                   <a className="p-2">Login</a>
                 </Link>
               )}
+               {' '} sxscs 
             </div>
+           
           </nav>
         </header>
         <main className="container m-auto mt-4 px-4">{children}</main>
