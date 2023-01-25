@@ -30,7 +30,7 @@ export default function Home({ products, featuredProducts }) {
 
   return (
     <Layout title="Home Page">
-      <Carousel showThumbs={false} autoPlay>
+      <Carousel showThumbs={false} autoPlay swipeable infiniteLoop>
         {featuredProducts.map((product) => (
           <div key={product._id} >
             <Link href={`/product/${product.slug}`} legacyBehavior>

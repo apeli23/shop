@@ -95,10 +95,8 @@ export default function Layout({ title, children }) {
                 <Link href="/login" legacyBehavior>
                   <a className="p-2">Login</a>
                 </Link>
-              )}
-               {' '} sxscs 
+              )}{' '}
             </div>
-           
           </nav>
         </header>
         <main className="container m-auto mt-4 px-4">{children}</main>

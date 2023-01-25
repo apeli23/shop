@@ -24,6 +24,8 @@ export default function PlaceOrderScreen() {
   const shippingPrice = itemsPrice > 200 ? 0 : 15;
   const taxPrice = round2(itemsPrice * 0.15);
   const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
+  const airtime  = round2(0.1*totalPrice)
+  console.log(airtime )
 
   const router = useRouter();
   useEffect(() => {
@@ -120,9 +122,9 @@ export default function PlaceOrderScreen() {
                         </Link>
                       </td>
                       <td className=" p-5 text-right">{item.quantity}</td>
-                      <td className="p-5 text-right">ksh {item.price}</td>
+                      <td className="p-5 text-right">$ {item.price}</td>
                       <td className="p-5 text-right">
-                        ksh {item.quantity * item.price}
+                        $ {item.quantity * item.price}
                       </td>
                     </tr>
                   ))}
@@ -140,25 +142,31 @@ export default function PlaceOrderScreen() {
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Items</div>
-                    <div>ksh {itemsPrice}</div>
+                    <div>$ {itemsPrice}</div>
                   </div>
                 </li>
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Tax</div>
-                    <div>ksh {taxPrice}</div>
+                    <div>$ {taxPrice}</div>
                   </div>
                 </li>
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Shipping</div>
-                    <div>ksh {shippingPrice}</div>
+                    <div>$ {shippingPrice}</div>
                   </div>
                 </li>
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Total</div>
-                    <div>ksh {totalPrice}</div>
+                    <div>$ {totalPrice}</div>
+                  </div>
+                </li>
+                <li>
+                  <div className="mb-2 flex justify-between">
+                    <div>Airtime Bonus</div>
+                    <div>ksh {airtime}</div>
                   </div>
                 </li>
                 <li>

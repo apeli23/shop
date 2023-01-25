@@ -84,7 +84,7 @@ export default function AdminProdcutsScreen() {
     }
     try {
       dispatch({ type: 'DELETE_REQUEST' });
-      console.log(productId)
+      console.log(productId);
       await axios.delete(`/api/admin/products/${productId}`);
       dispatch({ type: 'DELETE_SUCCESS' });
       toast.success('Product deleted successfully');
@@ -99,10 +99,14 @@ export default function AdminProdcutsScreen() {
         <div>
           <ul>
             <li>
-              <Link href="/admin/dashboard" legacyBehavior>Dashboard</Link>
+              <Link href="/admin/dashboard" legacyBehavior>
+                Dashboard
+              </Link>
             </li>
             <li>
-              <Link href="/admin/orders" legacyBehavior>Orders</Link>
+              <Link href="/admin/orders" legacyBehavior>
+                Orders
+              </Link>
             </li>
             <li>
               <Link href="/admin/products" legacyBehavior>
@@ -110,7 +114,9 @@ export default function AdminProdcutsScreen() {
               </Link>
             </li>
             <li>
-              <Link href="/admin/users" legacyBehavior>Users</Link>
+              <Link href="/admin/users" legacyBehavior>
+                Users
+              </Link>
             </li>
           </ul>
         </div>
@@ -149,12 +155,15 @@ export default function AdminProdcutsScreen() {
                     <tr key={product._id} className="border-b">
                       <td className=" p-5 ">{product._id.substring(20, 24)}</td>
                       <td className=" p-5 ">{product.name}</td>
-                      <td className=" p-5 ">ksh{product.price}</td>
+                      <td className=" p-5 ">$ {product.price}</td>
                       <td className=" p-5 ">{product.category}</td>
                       <td className=" p-5 ">{product.countInStock}</td>
                       <td className=" p-5 ">{product.rating}</td>
                       <td className=" p-5 ">
-                        <Link href={`/admin/product/${product._id}`} legacyBehavior>
+                        <Link
+                          href={`/admin/product/${product._id}`}
+                          legacyBehavior
+                        >
                           <a type="button" className="default-button">
                             Edit
                           </a>
