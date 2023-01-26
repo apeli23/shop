@@ -9,6 +9,7 @@ const initialState = {
     : { cartItems: [], shippingAddress: {}, paymentMethod: '' },
 };
 
+
 function reducer(state, action) {
   switch (action.type) {
     case 'CART_ADD_ITEM': {
@@ -52,8 +53,10 @@ function reducer(state, action) {
           shippingAddress: {
             ...state.cart.shippingAddress,
             ...action.payload,
+       
           },
         },
+        
       };
     case 'SAVE_PAYMENT_METHOD':
       return {
@@ -63,10 +66,12 @@ function reducer(state, action) {
           paymentMethod: action.payload,
         },
       };
+      
     default:
       return state;
+      
   }
-}
+} 
 
 export function StoreProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);

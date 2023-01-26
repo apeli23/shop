@@ -4,10 +4,12 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import Layout from '../../components/Layout';
 import { getError } from '../../utils/error';
+import { useForm } from 'react-hook-form';
+
 
 function reducer(state, action) {
   switch (action.type) {
@@ -44,12 +46,18 @@ function reducer(state, action) {
   }
 }
 function OrderScreen() {
+  const contactRef = useRef(null);
+
+  const [contact, setContact] = useState();
   const { data: session } = useSession();
   // order/:id
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
   const { query } = useRouter();
   const orderId = query.id;
+
+  
+  const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
 
   const [
     {
@@ -72,6 +80,7 @@ function OrderScreen() {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
         const { data } = await axios.get(`/api/orders/${orderId}`);
+        // console.trace({data})
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (err) {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
@@ -118,7 +127,12 @@ function OrderScreen() {
     isDelivered,
     deliveredAt,
   } = order;
-
+  // const airtime = order.paymentMethod.airtime;
+  const handleChange = (event) => {
+    const phonenumber = event.target.value;
+    console.log(phonenumber)
+  };
+  const airtime = round2(0.1*totalPrice);
   function createOrder(data, actions) {
     return actions.order
       .create({
@@ -134,6 +148,7 @@ function OrderScreen() {
   }
 
   function onApprove(data, actions) {
+
     return actions.order.capture().then(async function (details) {
       try {
         dispatch({ type: 'PAY_REQUEST' });
@@ -142,11 +157,33 @@ function OrderScreen() {
           details
         );
         dispatch({ type: 'PAY_SUCCESS', payload: data });
-        toast.success('Order is paid successgully');
+        toast.success('Order is paid successfully');
+      airtimeAPI()
       } catch (err) {
         dispatch({ type: 'PAY_FAIL', payload: getError(err) });
         toast.error(getError(err));
       }
+    });
+  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const airtimeAPI = async () => {
+    const contactHandler= shippingAddress.phoneNumber
+    const contact = contactHandler.toString()
+    const credit = airtime.toString()
+    await fetch('/api/africastalking', {
+      method: 'POST',
+      body: JSON.stringify({
+        data: credit, contact
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    }).then((response) => response.json())
+    .then((data) => {
+      console.log(data.data);
     });
   }
   function onError(err) {
@@ -160,6 +197,7 @@ function OrderScreen() {
         `/api/admin/orders/${order._id}/deliver`,
         {}
       );
+      console.log(data)
       dispatch({ type: 'DELIVER_SUCCESS', payload: data });
       toast.success('Order is delivered');
     } catch (err) {
@@ -167,7 +205,6 @@ function OrderScreen() {
       toast.error(getError(err));
     }
   }
-
   return (
     <Layout title={`Order ${orderId}`}>
       <h1 className="mb-4 text-xl">{`Order ${orderId}`}</h1>
@@ -181,9 +218,9 @@ function OrderScreen() {
             <div className="card  p-5">
               <h2 className="mb-2 text-lg">Shipping Address</h2>
               <div>
-                {shippingAddress.fullName}, {shippingAddress.address},{' '}
-                {shippingAddress.city}, {shippingAddress.postalCode},{' '}
-                {shippingAddress.country}
+                {shippingAddress.fullName},{shippingAddress.phoneNumber}{' '} ,
+                {shippingAddress.address},{shippingAddress.city}{' '}, 
+                {shippingAddress.postalCode},{shippingAddress.country}{' '}
               </div>
               {isDelivered ? (
                 <div className="alert-success">Delivered at {deliveredAt}</div>
@@ -231,9 +268,9 @@ function OrderScreen() {
                         </Link>
                       </td>
                       <td className=" p-5 text-right">{item.quantity}</td>
-                      <td className="p-5 text-right">$  {item.price}</td>
+                      <td className="p-5 text-right">ksh {item.price}</td>
                       <td className="p-5 text-right">
-                        ${item.quantity * item.price}
+                        ksh{item.quantity * item.price}
                       </td>
                     </tr>
                   ))}
@@ -248,25 +285,31 @@ function OrderScreen() {
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Items</div>
-                    <div>$ {itemsPrice}</div>
+                    <div>ksh {itemsPrice}</div>
                   </div>
                 </li>{' '}
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Tax</div>
-                    <div>$ {taxPrice}</div>
+                    <div>ksh {taxPrice}</div>
                   </div>
                 </li>
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Shipping</div>
-                    <div>$ {shippingPrice}</div>
+                    <div>ksh {shippingPrice}</div>
+                  </div>
+                </li>
+                <li>
+                  <div className="mb-2 flex justify-between">
+                    <div>Airtime Bonus</div>
+                    <div>ksh {airtime}</div>
                   </div>
                 </li>
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Total</div>
-                    <div>$ {totalPrice}</div>
+                    <div>ksh {totalPrice}</div>
                   </div>
                 </li>
                 {!isPaid && (

@@ -107,7 +107,7 @@ const data = {
       brand: 'Sony',
       rating: 4.5,
       numReviews: 8,
-      countInStock: 20,
+      countInStock: 2,
       description: 'PLAYSTATION 5 CONSOLE DISC EDITION (CFI-1215A/CFI-1216A)',
       isFeatured: true,
       banner: '/images/banner3.jpg',

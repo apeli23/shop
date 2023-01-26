@@ -21,28 +21,25 @@ export default function ShippingScreen() {
 
   useEffect(() => {
     setValue('fullName', shippingAddress.fullName);
+    setValue('phoneNumber',shippingAddress.phoneNumber);
     setValue('address', shippingAddress.address);
     setValue('city', shippingAddress.city);
     setValue('postalCode', shippingAddress.postalCode);
     setValue('country', shippingAddress.country);
   }, [setValue, shippingAddress]);
 
-  const submitHandler = ({ fullName, address, city, postalCode, country }) => {
+  const submitHandler = ({ fullName,phoneNumber, address, city, postalCode, country }) => {
+    const xyzData =  { fullName,phoneNumber, address, city, postalCode, country };
+
     dispatch({
       type: 'SAVE_SHIPPING_ADDRESS',
-      payload: { fullName, address, city, postalCode, country },
+      payload:xyzData,
     });
     Cookies.set(
       'cart',
       JSON.stringify({
         ...cart,
-        shippingAddress: {
-          fullName,
-          address,
-          city,
-          postalCode,
-          country,
-        },
+        shippingAddress: xyzData
       })
     );
 
@@ -69,6 +66,20 @@ export default function ShippingScreen() {
           />
           {errors.fullName && (
             <div className="text-red-500">{errors.fullName.message}</div>
+          )}
+        </div>
+        <div className="mb-4">
+          <label htmlFor="phoneNumber">Phone Number(254..)</label>
+          <input
+            className="w-full"
+            id="phoneNumber"
+            autoFocus
+            {...register('phoneNumber', {
+              required: 'Please enter phone number',
+            })}
+          />
+          {errors.fullName && (
+            <div className="text-red-500">{errors.phoneNumber.message}</div>
           )}
         </div>
         <div className="mb-4">

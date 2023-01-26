@@ -25,10 +25,11 @@ export default function PlaceOrderScreen() {
   const taxPrice = round2(itemsPrice * 0.15);
   const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
   const airtime  = round2(0.1*totalPrice)
-  console.log(airtime )
+
 
   const router = useRouter();
   useEffect(() => {
+    console.log(cart)
     if (!paymentMethod) {
       router.push('/payment');
     }
@@ -39,7 +40,7 @@ export default function PlaceOrderScreen() {
   const placeOrderHandler = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.post('/api/orders', {
+      const bodyData = {
         orderItems: cartItems,
         shippingAddress,
         paymentMethod,
@@ -47,7 +48,9 @@ export default function PlaceOrderScreen() {
         shippingPrice,
         taxPrice,
         totalPrice,
-      });
+        airtime,
+      };
+      const { data } = await axios.post('/api/orders', bodyData);
       setLoading(false);
       dispatch({ type: 'CART_CLEAR_ITEMS' });
       Cookies.set(
@@ -78,8 +81,8 @@ export default function PlaceOrderScreen() {
             <div className="card  p-5">
               <h2 className="mb-2 text-lg">Shipping Address</h2>
               <div>
-                {shippingAddress.fullName}, {shippingAddress.address},{' '}
-                {shippingAddress.city}, {shippingAddress.postalCode},{' '}
+                {shippingAddress.fullName},{shippingAddress.phoneNumber}, {shippingAddress.address},{' '}
+                {shippingAddress.city},{shippingAddress.postalCode},{' '}
                 {shippingAddress.country}
               </div>
               <div>
@@ -122,9 +125,9 @@ export default function PlaceOrderScreen() {
                         </Link>
                       </td>
                       <td className=" p-5 text-right">{item.quantity}</td>
-                      <td className="p-5 text-right">$ {item.price}</td>
+                      <td className="p-5 text-right">ksh {item.price}</td>
                       <td className="p-5 text-right">
-                        $ {item.quantity * item.price}
+                        ksh {item.quantity * item.price}
                       </td>
                     </tr>
                   ))}
@@ -142,25 +145,19 @@ export default function PlaceOrderScreen() {
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Items</div>
-                    <div>$ {itemsPrice}</div>
+                    <div>ksh {itemsPrice}</div>
                   </div>
                 </li>
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Tax</div>
-                    <div>$ {taxPrice}</div>
+                    <div>ksh {taxPrice}</div>
                   </div>
                 </li>
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Shipping</div>
-                    <div>$ {shippingPrice}</div>
-                  </div>
-                </li>
-                <li>
-                  <div className="mb-2 flex justify-between">
-                    <div>Total</div>
-                    <div>$ {totalPrice}</div>
+                    <div>ksh {shippingPrice}</div>
                   </div>
                 </li>
                 <li>
@@ -169,6 +166,13 @@ export default function PlaceOrderScreen() {
                     <div>ksh {airtime}</div>
                   </div>
                 </li>
+                <li>
+                  <div className="mb-2 flex justify-between">
+                    <div>Total</div>
+                    <div>ksh {totalPrice}</div>
+                  </div>
+                </li>
+              
                 <li>
                   <button
                     disabled={loading}

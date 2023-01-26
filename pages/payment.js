@@ -28,13 +28,14 @@ export default function PaymentScreen() {
         paymentMethod: selectedPaymentMethod,
       })
     );
-
+    
     router.push('/placeorder');
   };
   useEffect(() => {
     if (!shippingAddress.address) {
       return router.push('/shipping');
     }
+    // console.log({shippingAddress})
     setSelectedPaymentMethod(paymentMethod || '');
   }, [paymentMethod, router, shippingAddress.address]);
 
