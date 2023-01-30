@@ -163,12 +163,12 @@ export default function PlaceOrderScreen() {
                     <div>$ {totalPrice}</div>
                   </div>
                 </li>
-                <li>
+                {/* <li>
                   <div className="mb-2 flex justify-between">
                     <div>Airtime Bonus</div>
                     <div>ksh {airtime}</div>
                   </div>
-                </li>
+                </li> */}
                 <li>
                   <button
                     disabled={loading}
